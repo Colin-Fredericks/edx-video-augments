@@ -25,33 +25,47 @@ span.VQControls {
 }
 
 .augment {
-	height: 100px;
-	width: 100px;
+	height: 80px;
+	width: 800px;
 	
-	margin: 4px;
-	border: 2px solid grey;
-	padding: 4px;
+	margin: 3px;
 	
 	display: inline-block;
 	vertical-align: top;
 	
-	font-size: 80%;
 	white-space: normal;
 	overflow: hidden;
 }
 
-.greyout {
-	opacity: 0.5;
+.augmenttab {
+	height: 25px;
+	width: 25px;
+	
+	margin: 2px;
+	margin-right: 10px;
+	border: none;
+	padding: 2px;
+	
+	display: inline-block;
+	vertical-align: top;
 }
 
-.overlapOK {
-    position: absolute;
-    left: 10px;
-    top: 10px;
+.greyout {
+	opacity: 0.4;
+}
+
+.blockCap {
+    float: left;
+    height: 75px;
+    margin-right: 2px;
 }
 
 div.augment > span.title{
 	font-weight: bold;
+}
+
+div.augment > p{
+	font-size: 80%;
 }
 
 span#onoff {
@@ -68,7 +82,7 @@ div#augments{
 
 div#augmenttray{
 	width: 818px;
-	height: 135px;
+	height: 50px;
 	position: relative;
 	
 	border: 1px solid black;
@@ -77,4 +91,14 @@ div#augmenttray{
 	
 	overflow-x: scroll;
 	overflow-y: hidden;
+}
+
+div#augmenttext{
+	width: 818px;
+	height: 80px;
+	position: relative;
+	
+	border: 1px solid black;
+	
+	overflow: hidden;
 }

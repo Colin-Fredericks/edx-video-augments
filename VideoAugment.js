@@ -14,6 +14,7 @@ $(document).ready(function(){
 	console.log('working');
 	
 	video.append('<div id="augmenttray"></div>');
+	video.append('<div id="augmenttext"></div>');
 
 	// Put all the augments in the tray and make a timer for them.
 	$('#augments').children().each(function(index){
@@ -27,17 +28,26 @@ $(document).ready(function(){
 		Logger.log('harvardx.video_augments', {'display_augment': augmentTitle.text(),'time': augmentTime});
 		console.log('displaying augment: ' + augmentTitle.text() + ' at time ' + augmentTime);
 		
-		// Move the augment to the tray.
-		currentAugment.detach;
-		$('#augmenttray').append($(this));
+		// Get the icon for the augment so I can use it in the tray.
+		var augmentIcon = currentAugment.find('.augmenticon');
+		// Put it in place
+		$('#augmenttray').append(augmentIcon);
+		// Put a div around it for styling purposes
+		augmentIcon.wrap('<div class="augmenttab" '
+			+ 'id="augment' 
+			+ index 
+			+ '" data-time="' 
+			+ augmentTime 
+			+ '"></div>');
+		
+		// Move the augment itself to the tray.
+		$('#augmenttext').append(currentAugment);
 		
 		// Prep the augment for use:
 		// Give it the augment class.
 		currentAugment.addClass('augment');
 		// Give it a unique ID
-		currentAugment.attr('id', 'augment'+index);
-		// If there's an image, set the title text over it.
-		currentAugment.find('img').addClass('overlapOK');
+		currentAugment.attr('id', 'augmentdetail'+index);
 		// Should perhaps add a little magnifying glass icon for zoom-in, 
 		// but it's better to wait and figure out UI stuff first.
 		
@@ -46,6 +56,14 @@ $(document).ready(function(){
 		augmentTimer[index] = {};
 		augmentTimer[index].time = Number($(this).attr('data-time'));
 	});
+	
+	// Hide all the detail text until it's relevant.
+	$('.augment').hide();
+	// If the first one has zero or negative time, make it visible right away.
+	if($('#augmentdetail0').attr('data-time') < 0){
+		$('#augmentdetail0').show();
+	}
+	
 	
 	augmentTimer.sort(timeCompare); // Uses a custom function to sort by time.
 									// I could have just done an array of times, but this will be more flexible later.
@@ -108,8 +126,8 @@ $(document).ready(function(){
 			}
 		});
 		
-		// If someone clicks on one of the augments, go to the appropriate time.
-		$('.augment').on('click tap', function(event){
+		// If someone clicks on one of the augment tabs, go to the appropriate time.
+		$('.augmenttab').on('click tap', function(event){
 			var thisTime = $(this).attr('data-time')
 			console.log(this);
 			setAugmentCounter(thisTime);
@@ -173,18 +191,25 @@ $(document).ready(function(){
 	function showAugment(augTime, state){
 		
 		console.log('showAugment at time ' + augTime);
-	
-		var current = $('[data-time="'+augTime+'"]');
+		
+		// First move the icon bar to the right location.
+		
+		var currentIcon = $('[data-time="'+augTime+'"]');
 		var tray = $('#augmenttray');
-		var idnum = current.attr('id').replace('augment', '');
-		var currentlocation = current.offset().left - tray.offset().left;
+		var idnum = currentIcon.attr('id').replace('augment', '');
 		var newlocation = augmentWidth * idnum;
 
 		console.log('idnum: ' + idnum + ' newlocation: ' + newlocation);
 		
 		tray.animate({scrollLeft: newlocation}, 500);
-		$('.augment').addClass('greyout');
-		current.removeClass('greyout');
+		$('.augmenttab').addClass('greyout');
+		currentIcon.removeClass('greyout');
+		
+		// Next, replace the text below it.
+		// Get the new text, hide the old one, and show the new one.
+		$('.augment').hide();
+		var currentTextBlock = $('#augmentdetail' + idnum);
+		currentTextBlock.show();
 		
 		console.log('scrolled to ' + newlocation);
 	}
