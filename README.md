@@ -1,7 +1,7 @@
 Video Augments for edX
 ====================
 
-This script will make a set of little doodads underneath your video on edX. I'm still working on it; this is a preliminary draft at the moment.
+This script will make a set of little doodads underneath your video on edX. You can click on them to move the video or get more detail. I'm still working on it; this is a preliminary draft at the moment.
 
 If you're an edX student, this script isn't useful for you. It's something that course designers use, not something that students can use.
 
@@ -9,7 +9,7 @@ If you're an edX student, this script isn't useful for you. It's something that 
 How Do I Implement This?
 --------
 
-Haven't finished it yet.
+Haven't finished it yet. I'll let you know when it's done.
 
 How Does It Work?
 --------
@@ -20,7 +20,7 @@ Files
 --------
 
 * **VideoAugment.css** provides a few things to help this blend in with edX. Put it in your "Files and Uploads" section.
-* **VideoAugment.html** is what you cut-and-paste into a Raw HTML component to make this work.
+* **VideoAugment.html** is what you cut-and-paste into a Raw HTML component to make this work. You can put the component anywhere on the page; the augments will appear right below the first video on the page.
 * **VideoAugment.js** does the actual work of moving the problems around and displaying them. Put it in your "Files and Uploads" section.
 
 Dependencies and Fragility
@@ -39,6 +39,6 @@ Not ready for prime time. Does not have full functionality.
 To Do list
 -----------
 
-* Basic functionality
-* UI prototyping
+* Add click-for-popup and click-for-link functionality
+* Add Aria attributes (and do other stuff) for accessibility
 * lots more
