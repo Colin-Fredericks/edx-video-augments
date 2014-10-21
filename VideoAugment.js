@@ -5,7 +5,7 @@ $(document).ready(function(){
 	var state = video.data('video-player-state');	// Sometimes this fails and that's ok.
 	var time;
 	var augmentCounter = 0;
-	var augmentWidth = 120;
+	var augmentWidth = 60;
 	var skipEmAll = false;
 	var problemsBeingShown = 0;
 	var augmentTimer = [];
@@ -59,10 +59,6 @@ $(document).ready(function(){
 	
 	// Hide all the detail text until it's relevant.
 	$('.augment').hide();
-	// If the first one has zero or negative time, make it visible right away.
-	if($('#augmentdetail0').attr('data-time') < 0){
-		$('#augmentdetail0').show();
-	}
 	
 	
 	augmentTimer.sort(timeCompare); // Uses a custom function to sort by time.
@@ -134,6 +130,12 @@ $(document).ready(function(){
 			showAugment(thisTime, state);
 			ISaidGoTo(thisTime);
 		});
+
+		// If the first augment has zero or negative time, make it visible right away.
+		var firstTime = $('#augmentdetail0').attr('data-time')
+		if(firstTime <= 0){
+			showAugment(firstTime, state);
+		}
 
 	}
 	
