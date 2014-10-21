@@ -11,6 +11,17 @@ $(document).ready(function(){
 	var augmentTimer = [];
 	var overkill = false;
 	
+	// Note that global variable AugmentOptions is defined on the HTML page.
+	// Set default options here.
+	if (typeof AugmentOptions == 'undefined'){
+		var AugmentOptions = {
+			'effect': 'fade',
+			'hide': {'direction':'left'},
+			'show': {'direction':'right'},
+			'speed': 500
+		}
+	}
+	
 	console.log('working');
 	
 	video.append('<div id="augmenttray"></div>');
@@ -124,7 +135,7 @@ $(document).ready(function(){
 		
 		// If someone clicks on one of the augment tabs, go to the appropriate time.
 		$('.augmenttab').on('click tap', function(event){
-			var thisTime = $(this).attr('data-time')
+			var thisTime = $(this).attr('data-time');
 			console.log(this);
 			setAugmentCounter(thisTime);
 			showAugment(thisTime, state);
@@ -199,21 +210,23 @@ $(document).ready(function(){
 		var currentIcon = $('[data-time="'+augTime+'"]');
 		var tray = $('#augmenttray');
 		var idnum = currentIcon.attr('id').replace('augment', '');
-		var newlocation = augmentWidth * idnum;
+		var newlocation = Math.max(augmentWidth * idnum - 10, 0); // Subtracting 10 to show a little to the left.
 
 		console.log('idnum: ' + idnum + ' newlocation: ' + newlocation);
 		
-		tray.animate({scrollLeft: newlocation}, 500);
+		tray.animate({scrollLeft: newlocation}, 700);
 		$('.augmenttab').addClass('greyout');
 		currentIcon.removeClass('greyout');
+		console.log('scrolled to ' + newlocation);
 		
 		// Next, replace the text below it.
 		// Get the new text, hide the old one, and show the new one.
-		$('.augment').hide();
-		var currentTextBlock = $('#augmentdetail' + idnum);
-		currentTextBlock.show();
+		$('.augment:visible').hide(AugmentOptions.effect, AugmentOptions.hide, AugmentOptions.speed);
+		setTimeout(function(){
+			var currentTextBlock = $('#augmentdetail' + idnum);
+			currentTextBlock.show(AugmentOptions.effect, AugmentOptions.show, AugmentOptions.speed);
+		}, 500);
 		
-		console.log('scrolled to ' + newlocation);
 	}
 	
 	// I blame multiple Javascript timing issues.
