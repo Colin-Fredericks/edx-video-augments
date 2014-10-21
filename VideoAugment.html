@@ -1,0 +1,115 @@
+<!-- 
+	Video Augment Controller! 
+	Copy-and-paste all of this into a Raw HTML element under your video.
+	Items are called from the bottom of this page. 
+	They are added at times specified in the "data-timer" attributes.
+-->
+
+<!-- 
+	Make sure that the script and link tags below are included. 
+	You will not need to change these. 
+-->
+<script src="/static/VideoAugment.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/VideoAugment.css" />
+
+<div id="augmenttray"></div>
+
+<!-- 
+	These are the control buttons for the video problems.
+	You can change the text in these, but don't change the tags at all. 
+-->
+<!-- You know, I don't think we need these here after all.
+<button id="augmentPlayPause" aria-label="Start"><span id="playpauseicon" class="VQControls">&#8227;</span> <span id="playpauseword">Play</span></button>
+<button id="augmentReset" aria-label="Answer Video Problems From Beginning"><span class="VQControls">&#8617;</span> Restart</button>
+<button id="backOneAugment" aria-label="Go Back One Question"><span class="VQControls">&#8676;</span> Back One</button>
+<button id="augmentToggle" aria-label="Toggle Video Problems On/Off"><span id="sunmoon" class="VQControls">&#9788;</span> <span id="onoff">Augments are On</span></button>
+-->
+
+
+<!-- 
+	These are the augments for this video.
+	They will be invisible until called.
+-->
+<div id="augments">
+
+<div data-time="4">
+	<p><img src="/static/zelda.jpeg" width="100" alt="The emblem of the Zeda videogame series"/></p>
+	<span class="title">The Legend of Zelda</span>
+</div>
+
+<div data-time="8.5">
+	<span class="title">Blocks</span>
+	<p>You can pick up blocks with the Something Something Gloves. Titan Mitt? I'm not sure. Something like that.</p>
+</div>
+
+<div data-time="12">
+	<span class="title">Pegasus Boots</span>
+	<p>Pegasus Boots</p>
+</div>
+
+<div data-time="16">
+	<span class="title">Trees</span>
+	<p>Trees</p>
+</div>
+
+<div data-time="20">
+	<span class="title">Rupees</span>
+	<p>Rupees</p>
+</div>
+
+<div data-time="25">
+	<span class="title">Faeries</span>
+	<p>Faeries</p>
+</div>
+
+<div data-time="28">
+	<span class="title">Boomerang</span>
+	<p>Hookshot</p>
+</div>
+
+<div data-time="42">
+	<span class="title">Apple-Bombs</span>
+	<p>Apple-Bombs</p>
+</div>
+
+<div data-time="48">
+	<span class="title">Lawnmowing</span>
+	<p>Lawnmowing</p>
+</div>
+
+<div data-time="57">
+	<span class="title">The Corner</span>
+	<p>This tiny little corner bit</p>
+</div>
+
+<div data-time="60">
+	<span class="title">Town</span>
+	<p>Or at least a bit of it</p>
+</div>
+
+<div data-time="84">
+	<span class="title">BEES!</span>
+	<p>Covered in bees!</p>
+</div>
+
+<div data-time="107">
+	<span class="title">Chickens</span>
+	<p>The most dangerous thing in the game.</p>
+</div>
+
+<div data-time="146">
+	<span class="title">Seriously</span>
+	<p>What are you doing. Don't mess with the chickens.</p>
+</div>
+
+<div data-time="88">
+	<span class="title">Swoosh!</span>
+	<p>Sword moves that only work in video games</p>
+</div>
+
+<div data-time="600">
+	<span class="title">Notes</span>
+	<p>Extra Notes</p>
+</div>
+
+</div>

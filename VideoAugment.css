@@ -1,0 +1,80 @@
+.ui-widget-overlay {
+   background: #666;
+   opacity: .30;
+   filter: Alpha(Opacity=30);
+   position:fixed;
+}
+
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+
+.ui-dialog-titlebar {
+	background: linear-gradient(to top, #ccc 0%,#bbb 20%,#eee 100%);
+	border: 1px solid #AAA;
+}
+
+.answeredButton {
+	background: linear-gradient(to top, #9fd 0%,#7db 20%,#afd 100%);
+	background-color:#afc;
+	text-shadow: none;
+}
+
+span.VQControls {
+	font-size: 150%;
+}
+
+.augment {
+	height: 100px;
+	width: 100px;
+	
+	margin: 4px;
+	border: 2px solid grey;
+	padding: 4px;
+	
+	display: inline-block;
+	vertical-align: top;
+	
+	font-size: 80%;
+	white-space: normal;
+	overflow: hidden;
+}
+
+.greyout {
+	opacity: 0.5;
+}
+
+.overlapOK {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+div.augment > span.title{
+	font-weight: bold;
+}
+
+span#onoff {
+	font-weight: bold;
+}
+
+span#playpauseword{
+	font-weight: bold;
+}
+
+div#augments{
+	display:none;
+}
+
+div#augmenttray{
+	width: 800px;
+	height: 135px;
+	position: relative;
+	
+	border: 1px solid black;
+	
+	white-space: nowrap;
+	
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
