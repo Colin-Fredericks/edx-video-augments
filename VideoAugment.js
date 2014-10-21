@@ -12,6 +12,8 @@ $(document).ready(function(){
 	var overkill = false;
 	
 	console.log('working');
+	
+	video.append('<div id="augmenttray"></div>');
 
 	// Put all the augments in the tray and make a timer for them.
 	$('#augments').children().each(function(index){
