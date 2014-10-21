@@ -6,10 +6,10 @@ $(document).ready(function(){
 	var time;
 	var augmentCounter = 0;
 	var augmentWidth = 120;
-	var skipEmAll;
-	var protectedTime = false;
+	var skipEmAll = false;
 	var problemsBeingShown = 0;
 	var augmentTimer = [];
+	var overkill = false;
 	
 	console.log('working');
 
@@ -42,9 +42,13 @@ $(document).ready(function(){
 
 		// Build the augment timer from the divs in the page.
 		augmentTimer[index] = {};
-		augmentTimer[index].time = $(this).attr('data-time');
+		augmentTimer[index].time = Number($(this).attr('data-time'));
 	});
-	augmentTimer.sort();
+	
+	augmentTimer.sort(timeCompare); // Uses a custom function to sort by time.
+									// I could have just done an array of times, but this will be more flexible later.
+	console.log(augmentTimer);
+	
 
 
 	// Log play/pause events from the player.
@@ -89,29 +93,25 @@ $(document).ready(function(){
 		state = video.data('video-player-state');
 		time = state.videoPlayer.currentTime;
 				
-
-		// Storing a separate augment counter for each video.
-		// Create the counter if it doesn't exist.
-		if(!localStorage[state.id + '-augment-counter']){
-			localStorage[state.id + '-augment-counter'] = '0';
-			localStorage[state.id + '-augment-skip'] = 'false';
-			
-			// If the counter didn't exist, we're on a new browser.
-			// Clear the questions from before the current time.
-			clearOlderPopUps(time);
-		}
-			
 		// If we start at a later time, set the counter appropriately.
 		setAugmentCounter(time);
 		
 		// Reset the counter properly if we seek.
+		// Don't double-count for our own ISaidGoTo function.
 		video.on('seek', function(event, ui) {
-			setAugmentCounter(ui);
+			if(!overkill){
+				setAugmentCounter(ui);
+			}else{
+				overkill = false;
+			}
 		});
 		
 		// If someone clicks on one of the augments, go to the appropriate time.
 		$('.augment').on('click tap', function(event){
 			var thisTime = $(this).attr('data-time')
+			console.log(this);
+			setAugmentCounter(thisTime);
+			showAugment(thisTime, state);
 			ISaidGoTo(thisTime);
 		});
 
@@ -124,12 +124,15 @@ $(document).ready(function(){
 			
 			state.videoPlayer.update();		// Forced update of time. Required for Safari.
 			time = state.videoPlayer.currentTime;
-
-			if(augmentCounter < augmentTimer.length){
 			
+			// Don't run off the end of the counter.
+			if(augmentCounter < augmentTimer.length){
+				
+				// If we pass a new augment, display it and update the counter.
 				if(time > augmentTimer[augmentCounter].time){
 				
-					if(!skipEmAll && !protectedTime){
+					if(!skipEmAll){
+						console.log('passed an augment, number ' + augmentCounter);
 						showAugment(augmentTimer[augmentCounter].time, state);
 						updateAugmentCounter(augmentCounter+1);
 					}else{
@@ -145,27 +148,37 @@ $(document).ready(function(){
 	// This resets the augment counter to match the time.
 	function setAugmentCounter(soughtTime){
 		Logger.log('harvardx.video_embedded_problems', {'control_event': 'seek_to_' + soughtTime});
-		console.log('sought to time ' + soughtTime);
-		updateAugmentCounter(0);  // Resetting fresh.
+		console.log('setAugmentCounter for time ' + soughtTime);
+		
+		// Count up the augment timer until we're above the sought time.
 		for(var i = 0; i < augmentTimer.length; i++){
-			if(soughtTime > augmentTimer[i].time){
-				updateAugmentCounter(i+1);
-				console.log('new augment counter: ' + augmentCounter);
-			}else{
+			if(augmentTimer[i].time > soughtTime){
+				updateAugmentCounter(i);
 				break;
 			}
 		}
-		showAugment(augmentTimer[augmentCounter].time, state);
+		
+		console.log('Augment counter is now ' + augmentCounter);
 	}
 	
+	// This will have more in it if we go back to using local storage
+	function updateAugmentCounter(number){
+		augmentCounter = number;
+		console.log('updateAugmentCounter: ' + augmentCounter);
+	}
+
 	// Move to the current augment and highlight it.
 	function showAugment(augTime, state){
+		
+		console.log('showAugment at time ' + augTime);
+	
 		var current = $('[data-time="'+augTime+'"]');
 		var tray = $('#augmenttray');
-		var location = current.offset().left - tray.offset().left;
-		
 		var idnum = current.attr('id').replace('augment', '');
+		var currentlocation = current.offset().left - tray.offset().left;
 		var newlocation = augmentWidth * idnum;
+
+		console.log('idnum: ' + idnum + ' newlocation: ' + newlocation);
 		
 		tray.animate({scrollLeft: newlocation}, 500);
 		$('.augment').addClass('greyout');
@@ -174,18 +187,20 @@ $(document).ready(function(){
 		console.log('scrolled to ' + newlocation);
 	}
 	
-	// Keep the counter and the local storage in sync.
-	function updateAugmentCounter(number){
-		augmentCounter = number;
-		localStorage[state.id + '-augment-counter'] = number.toString();
-		console.log('counter set to ' + augmentCounter);
-	}
-
 	// I blame multiple Javascript timing issues.
 	function ISaidGoTo(thisTime){
-		time = Math.max(+thisTime - 1, 0);  // Using + to cast as number.
+		console.log('I said go to ' + thisTime);
+		overkill = true;
+		time = Math.max(+thisTime, 0);  // Using + to cast as number.
 		state.videoPlayer.seekTo(time);
-		setAugmentCounter(time)
-		console.log('I said go to ' + time);
 	}
+
+	function timeCompare(a,b){
+		if (a.time < b.time)
+			return -1;
+		if (a.time > b.time)
+			return 1;
+		return 0;
+	}
+
 });
