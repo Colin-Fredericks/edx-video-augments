@@ -42,3 +42,8 @@ To Do list
 * Add click-for-popup and click-for-link functionality
 * Add Aria attributes (and do other stuff) for accessibility
 * lots more
+
+Wish List
+---------
+
+* Would be totally sweet if the icon positions were more representative of where they are in the video, but I'm not sure that's gonna happen.
