@@ -85,7 +85,7 @@ div#augmenttray{
 	height: 50px;
 	position: relative;
 	
-	border: 1px solid black;
+	border: 1px solid #ccc;
 	
 	white-space: nowrap;
 	
@@ -98,7 +98,7 @@ div#augmenttext{
 	height: 80px;
 	position: relative;
 	
-	border: 1px solid black;
+	border: 1px solid #ccc;
 	
 	overflow: hidden;
 }
