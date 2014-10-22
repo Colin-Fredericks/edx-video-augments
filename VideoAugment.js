@@ -59,10 +59,7 @@ $(document).ready(function(){
 		currentAugment.addClass('augment');
 		// Give it a unique ID
 		currentAugment.attr('id', 'augmentdetail'+index);
-		// Should perhaps add a little magnifying glass icon for zoom-in, 
-		// but it's better to wait and figure out UI stuff first.
 		
-
 		// Build the augment timer from the divs in the page.
 		augmentTimer[index] = {};
 		augmentTimer[index].time = Number($(this).attr('data-time'));
@@ -227,8 +224,71 @@ $(document).ready(function(){
 			currentTextBlock.show(AugmentOptions.effect, AugmentOptions.show, AugmentOptions.speed);
 		}, 500);
 		
+		// Add listener for pop-up links.
+		$('.popup').on('click tap', function(event){
+			event.preventDefault();
+			var linkTitle = $(this).attr('href');
+			popUpProblem(linkTitle, state);
+		});
+
 	}
 	
+	// Does the work of creating the dialogue.
+	// It pulls a question from lower down in the page, and puts it back when we're done.
+	function popUpProblem(title, state){
+		
+		// Find the div for the problem based on its title.
+		augmentDiv = $('h2:contains(' + title + ')').parent().parent();
+
+		var augmentID = $('h2:contains(' + title + ')').parent().attr('id');
+		
+		Logger.log('harvardx.video_augments', {'display_problem': title, 'problem_id': augmentID,'time': time});
+		console.log('displaying item: ' + title + ' ' + augmentID);
+		
+		// Make a modal dialog out of the chosen problem.
+		augmentDiv.dialog({
+			modal: true,
+			dialogClass: "no-close",
+			resizable: true,
+			width: 800,
+			show: { 
+				effect: 'fade', 
+				duration: 200 
+			},
+			buttons: {
+				'Skip': function() {
+					dialogDestroyer('skip_problem');
+					$( this ).dialog( 'destroy' );  // Put the problem back when we're done.
+				},
+				'Done': function() {
+					dialogDestroyer('mark_done');
+					$( this ).dialog( 'destroy' );  // Put the problem back when we're done.
+				},
+			},
+			open: function() {
+				// Highlight various controls.
+				$('span.ui-button-text:contains("Done")').addClass('answeredButton');
+				$('input.check.Check').attr('style', '	background: linear-gradient(to top, #9df 0%,#7bd 20%,#adf 100%); background-color:#ACF;	text-shadow: none;');
+				state.videoPlayer.pause();
+			},
+			close: function(){ 
+				state.videoPlayer.play(); 
+				Logger.log('harvardx.video_augments', {'unusual_event': 'dialog_closed_unmarked'});
+				console.log('dialog closed');  // Should be pretty rare. I took out the 'close' button.
+			}
+		});
+	}
+
+
+	// Log the destruction of the dialog and play the video if there are no more dialogs up.
+	function dialogDestroyer(message){
+		Logger.log('harvardx.video_augments', {'control_event': message});
+		console.log(message);
+		$('input.check.Check').removeAttr('style');  // un-blue the check button.
+		state.videoPlayer.play();
+	}
+	
+
 	// I blame multiple Javascript timing issues.
 	function ISaidGoTo(thisTime){
 		console.log('I said go to ' + thisTime);
