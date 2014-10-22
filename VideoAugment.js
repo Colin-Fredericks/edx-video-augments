@@ -145,6 +145,22 @@ $(document).ready(function(){
 			showAugment(firstTime, state);
 		}
 
+		// Add listener for pop-up links.
+		$('.popup').on('click tap', function(event){
+			event.preventDefault();
+			var linkTitle = $(this).attr('href');
+			if(!state.videoPlayer.isPlaying()){
+				overkill = true;  // Don't restart the video if it was paused.
+			}
+			popUpProblem(linkTitle, state);
+		});
+
+		// Add listener for outside links that should pause the video
+		$('.pausevideo').on('click tap', function(event){
+			console.log(event);
+			state.videoPlayer.pause();
+		});
+
 	}
 	
 	// Every 500 ms, check to see whether we're going to add a new augment.
@@ -224,13 +240,6 @@ $(document).ready(function(){
 			currentTextBlock.show(AugmentOptions.effect, AugmentOptions.show, AugmentOptions.speed);
 		}, 500);
 		
-		// Add listener for pop-up links.
-		$('.popup').on('click tap', function(event){
-			event.preventDefault();
-			var linkTitle = $(this).attr('href');
-			popUpProblem(linkTitle, state);
-		});
-
 	}
 	
 	// Does the work of creating the dialogue.
@@ -272,7 +281,10 @@ $(document).ready(function(){
 				state.videoPlayer.pause();
 			},
 			close: function(){ 
-				state.videoPlayer.play(); 
+				if(!overkill){
+					state.videoPlayer.play(); 
+					overkill = false;
+				}
 				Logger.log('harvardx.video_augments', {'unusual_event': 'dialog_closed_unmarked'});
 				console.log('dialog closed');  // Should be pretty rare. I took out the 'close' button.
 			}
@@ -285,14 +297,17 @@ $(document).ready(function(){
 		Logger.log('harvardx.video_augments', {'control_event': message});
 		console.log(message);
 		$('input.check.Check').removeAttr('style');  // un-blue the check button.
-		state.videoPlayer.play();
+		if(!overkill){
+			state.videoPlayer.play(); 
+			overkill = false;
+		}
 	}
 	
 
 	// I blame multiple Javascript timing issues.
 	function ISaidGoTo(thisTime){
 		console.log('I said go to ' + thisTime);
-		overkill = true;
+		overkill = true; // We're about to seek. Don't trigger our seek listener twice.
 		time = Math.max(+thisTime, 0);  // Using + to cast as number.
 		state.videoPlayer.seekTo(time);
 	}
