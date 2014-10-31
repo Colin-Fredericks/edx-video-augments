@@ -50,12 +50,19 @@ span.VQControls {
 	border: none;
 	padding: 2px;
 	
+	box-shadow: 0px 0px 4px #666 inset;
+	background-color: #b3d9ff;
+	border-radius: 3px;
+	
 	display: inline-block;
 	vertical-align: top;
 }
 
 .greyout {
-	opacity: 0.6;
+	opacity: 0.55;
+	box-shadow: none;
+	background-color: transparent;
+	border-radius: 0px;
 }
 
 .popup { }
@@ -89,11 +96,13 @@ div#augments{
 }
 
 div#augmenttray{
-	width: 818px;
+	width: 816px;
 	height: 50px;
 	position: relative;
 	
-	border: 1px solid #aaa;
+	border-left: 2px solid #bbb;
+	border-right: 2px solid #bbb;
+	border-top: 2px solid #bbb;
 	
 	white-space: nowrap;
 	
@@ -102,11 +111,12 @@ div#augmenttray{
 }
 
 div#augmenttext{
-	width: 818px;
+	width: 816px;
 	height: 80px;
 	position: relative;
 	
-	border: 1px solid #aaa;
+	border: 2px solid #bbb;
+	background-color: white;
 	
 	overflow: hidden;
 }

@@ -24,23 +24,26 @@ $(document).ready(function(){
 	
 	console.log('working');
 	
-	video.append('<div id="augmenttray"></div>');
-	video.append('<div id="augmenttext"></div>');
+	var preferredLocation = $('.wrapper-downloads')
+	
+	preferredLocation.before('<div id="augmenttray"></div>');
+	preferredLocation.before('<div id="augmenttext"></div>');
 
 	// Put all the augments in the tray and make a timer for them.
 	$('#augments').children().each(function(index){
 	
 		var currentAugment = $(this);
-	
-		// Get the title for logging purposes
 		var augmentTitle = currentAugment.find('.title');
 		var augmentTime = currentAugment.attr('data-time');
 		
-		Logger.log('harvardx.video_augments', {'display_augment': augmentTitle.text(),'time': augmentTime});
-		console.log('displaying augment: ' + augmentTitle.text() + ' at time ' + augmentTime);
+		// This is sort of over-logging. Left in for debug.
+		// Logger.log('harvardx.video_augments', {'display_augment': augmentTitle.text(),'time': augmentTime});
+		// console.log('displaying augment: ' + augmentTitle.text() + ' at time ' + augmentTime);
 		
 		// Get the icon for the augment so I can use it in the tray.
 		var augmentIcon = currentAugment.find('.augmenticon');
+		// Give it an alt tag
+		augmentIcon.attr('alt', 'Icon: ' + augmentTitle.text() + ', ' + augmentTime + ' seconds');
 		// Put it in place
 		$('#augmenttray').append(augmentIcon);
 		// Put a div around it for styling purposes
@@ -50,6 +53,10 @@ $(document).ready(function(){
 			+ '" data-time="' 
 			+ augmentTime 
 			+ '"></div>');
+		// Wrap a link around the image so screen readers can click it
+		augmentIcon.wrap('<a href="" class="augmentlink"></a>');
+		// Give it a title
+		augmentIcon.parent().attr('title', augmentTitle.text() + ', ' + augmentTime + ' seconds');
 		
 		// Move the augment itself to the tray.
 		$('#augmenttext').append(currentAugment);
@@ -131,8 +138,9 @@ $(document).ready(function(){
 		});
 		
 		// If someone clicks on one of the augment tabs, go to the appropriate time.
-		$('.augmenttab').on('click tap', function(event){
-			var thisTime = $(this).attr('data-time');
+		$('.augmentlink').on('click tap', function(event){
+			event.preventDefault();
+			var thisTime = $(this).parent().attr('data-time');
 			console.log(this);
 			setAugmentCounter(thisTime);
 			showAugment(thisTime, state);
@@ -160,7 +168,12 @@ $(document).ready(function(){
 			console.log(event);
 			state.videoPlayer.pause();
 		});
-
+		
+		/*******************************************
+		* NOTE
+		* The jQuery on('focus', function) exists.
+		* I should use that for when people are going through the augments via screen reader.
+		*******************************************/
 	}
 	
 	// Every 500 ms, check to see whether we're going to add a new augment.
@@ -216,6 +229,16 @@ $(document).ready(function(){
 	// Move to the current augment and highlight it.
 	function showAugment(augTime, state){
 		
+		/*******************************************
+		* Can I have a nice small sound play when a video augment shows up?
+		* /static/91926__corsica-s__ding.wav is uploaded. Use that for now.
+		* reference: https://www.freesound.org/people/Corsica_S/sounds/91926/
+		* http://www.w3schools.com/tags/tag_audio.asp
+		* Alternatively: aria-live attributes:
+		*  A value of polite will notify the user of the content change as soon as he/she is done with the current task. This might take the form of a beep or an audio indication of the update. The user can then choose to directly jump to the updated content. This value would be the most common for content updates, especially for things like status notification, weather or stock updates, chat messages, etc.
+		*  An aria-live value of assertive will result in the user being alerted to the content change immediately or as soon as possible. Assertive would be used for important updates, such as error messages
+		*******************************************/
+		
 		console.log('showAugment at time ' + augTime);
 		
 		// First move the icon bar to the right location.
@@ -234,10 +257,14 @@ $(document).ready(function(){
 		
 		// Next, replace the text below it.
 		// Get the new text, hide the old one, and show the new one.
-		$('.augment:visible').hide(AugmentOptions.effect, AugmentOptions.hide, AugmentOptions.speed);
+		var currentAugment = $('.augment:visible');
+		currentAugment.hide(AugmentOptions.effect, AugmentOptions.hide, AugmentOptions.speed);
+		
 		setTimeout(function(){
-			var currentTextBlock = $('#augmentdetail' + idnum);
-			currentTextBlock.show(AugmentOptions.effect, AugmentOptions.show, AugmentOptions.speed);
+			var newTextBlock = $('#augmentdetail' + idnum);
+			newTextBlock.show(AugmentOptions.effect, AugmentOptions.show, AugmentOptions.speed);
+			// Pause if it says to pause.
+			if(newTextBlock.attr('data-pause')){ state.videoPlayer.pause(); }
 		}, 500);
 		
 	}
