@@ -1,7 +1,11 @@
-Video Augments for edX
+Video Links and Augments for edX
 ====================
 
-This script will make a set of little doodads underneath your video on edX. You can click on them to move the video or get more detail. I'm still working on it; this is a preliminary draft at the moment.
+There are two scripts in here.
+
+One (VideoLinks.js) pops up links on your edX video. It's a little like the cards that appear on YouTube videos, but you can link wherever you want with them. This is NOT accessible for visually-impaired users or keyboard users, so you should still have a list of these links elsewhere on your page.
+
+The other (VideoAugment.js) will make a set of little doodads underneath your video on edX. You can click on them to move the video or get more detail. I'm still working on it; this is a preliminary draft at the moment.
 
 If you're an edX student, this script isn't useful for you. It's something that course designers use, not something that students can use.
 
@@ -14,14 +18,21 @@ Haven't finished it yet. I'll let you know when it's done.
 How Does It Work?
 --------
 
-Pretty sketchily at the moment.
+Pretty sketchily at the moment. It hooks into a hidden data structure that edX puts into their default video player. If they remove that, intentionally or forgetfully, this stops working.
+
 
 Files
 --------
 
-* **VideoAugment.css** provides a few things to help this blend in with edX. Put it in your "Files and Uploads" section.
-* **VideoAugment.html** is what you cut-and-paste into a Raw HTML component to make this work. You can put the component anywhere on the page; the augments will appear right below the first video on the page.
-* **VideoAugment.js** does the actual work of moving the problems around and displaying them. Put it in your "Files and Uploads" section.
+* **Video Links**
+ * **VideoLinks.css** provides necessary styling for the links to appear above the video. Put it in your "Files and Uploads" section.
+ * **VideoLinks.html** is what you cut-and-paste into a Raw HTML component to make this work. You can put the component anywhere on the page; the augments will appear right below the first video on the page.
+ * **VideoLinks.js** does the actual work of displaying the links at the right times. Put it in your "Files and Uploads" section.
+
+* **Video Augments**
+ * **VideoAugment.css** provides a few things to help this blend in with edX. Put it in your "Files and Uploads" section.
+ * **VideoAugment.html** is what you cut-and-paste into a Raw HTML component to make this work. You can put the component anywhere on the page; the augments will appear right below the first video on the page.
+ * **VideoAugment.js** does the actual work of moving things around and displaying them. Put it in your "Files and Uploads" section.
 
 Dependencies and Fragility
 --------------
@@ -29,6 +40,7 @@ Dependencies and Fragility
 This script depends on jQuery and jQuery UI. Both of those are included in edX normally, so you should not need to worry about it.
 
 This script also depends on the particular structure of the web pages served by edX, which means that their later updates can potentially break the script. As long as I'm working at HarvardX I'll do my best to keep this script updated in a way that keeps it working.
+
 
 Status
 ------
@@ -40,7 +52,8 @@ To Do list
 -----------
 
 * Add click-for-popup and click-for-link functionality
-* Add Aria attributes (and do other stuff) for accessibility
+* Add Aria attributes (and do other stuff) to Augments for accessibility
+* Allow the links to appear in their regular place on the page, as well as on the video, so that people don't have to create a duplicate of the list.
 * lots more
 
 Wish List
