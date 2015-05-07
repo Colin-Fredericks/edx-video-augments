@@ -18,65 +18,7 @@ $(document).ready(function(){
 	
 	console.log('working');
 	
-	// We also need to make sure we can position things on the video.
-	// Let's base it off the position of the controls.
-	var vidlinks = $('#vidlinks-static').clone().prop('id', 'vidlinks-live')
-	vidlinks.appendTo('.video-controls');
-	$('.video-controls').addClass('link-positioner');
-	
-	
-	// Each link needs a little bit added to it, so we can simplify the author view.
-	// First, prep the links that we're going to display on the video.
-	$('#vidlinks-live').children().each(function(index){
-		
-		thisLinkBox = $(this);
-		thisLink = $(this).find('a');
-		
-		// Give the link a class and a unique ID
-		thisLinkBox.addClass('vidlink');
-		thisLinkBox.attr('id','linkdetail' + index);
-		
-		// Give the images a class for styling purporses.
-		thisLink.find('img').addClass('vidlinkicon');
-	
-		// Make all the links open in new pages.
-		thisLink.attr('target', '_blank');
-		// Style all the links
-		thisLink.addClass('linktext-live');
-		
-		// Build the link timer from the divs.
-		linkTimer[index] = {};
-		linkTimer[index].time = hmsToTime(thisLinkBox.attr('data-time'));
-		linkTimer[index].shown = false;
-	});
-	
-	// Now, prep the ones that go in as text
-	$('#vidlinks-static').children().each(function(index){
-		
-		thisLinkBox = $(this);
-		thisLink = $(this).find('a');
-		
-		// Give the link a class and a unique ID
-		thisLinkBox.addClass('vidlink-static');
-		thisLinkBox.attr('id','linkdetailstatic' + index);
-		
-		// Remove the images.
-		thisLink.find('img').remove();
-		
-	});
-	
-	// Finish making the unordered list.
-	$('.vidlink-static').wrapAll('<ul></ul>');
-	
-	
-	// If they click on one of the live links, pause the video.
-	$('.linktext-live').on('click tap', function(){
-		state.videoPlayer.pause();
-	});
-	
-	linkTimer.sort(timeCompare);	// Uses a custom function to sort by time.
-									// I could have just done an array of times, but this will be more flexible later.
-	console.log(linkTimer);
+	setUpLists();
 	
 
 	// Check to see whether the video is ready before continuing.
@@ -92,11 +34,74 @@ $(document).ready(function(){
 				setUpData();
 				mainLoop();
 			}, 0);
-			
 
 		}
 	}, 100);
 	
+	
+	function setUpLists(){
+	
+		// We also need to make sure we can position things on the video.
+		// Let's base it off the position of the controls.
+		var vidlinks = $('#vidlinks-static').clone().prop('id', 'vidlinks-live')
+		vidlinks.appendTo('.video-controls');
+		$('.video-controls').addClass('link-positioner');
+	
+	
+		// Each link needs a little bit added to it, so we can simplify the author view.
+		// First, prep the links that we're going to display on the video.
+		$('#vidlinks-live').children().each(function(index){
+		
+			thisLinkBox = $(this);
+			thisLink = $(this).find('a');
+		
+			// Give the link a class and a unique ID
+			thisLinkBox.addClass('vidlink');
+			thisLinkBox.attr('id','linkdetail' + index);
+		
+			// Give the images a class for styling purporses.
+			thisLink.find('img').addClass('vidlinkicon');
+	
+			// Make all the links open in new pages.
+			thisLink.attr('target', '_blank');
+			// Style all the links
+			thisLink.addClass('linktext-live');
+		
+			// Build the link timer from the divs.
+			linkTimer[index] = {};
+			linkTimer[index].time = hmsToTime(thisLinkBox.attr('data-time'));
+			linkTimer[index].shown = false;
+		});
+	
+		// Now, prep the ones that go in as text
+		$('#vidlinks-static').children().each(function(index){
+		
+			thisLinkBox = $(this);
+			thisLink = $(this).find('a');
+		
+			// Give the link a class and a unique ID
+			thisLinkBox.addClass('vidlink-static');
+			thisLinkBox.attr('id','linkdetailstatic' + index);
+		
+			// Remove the images.
+			thisLink.find('img').remove();
+		
+		});
+		
+		
+		// Finish making the unordered list.
+		$('.vidlink-static').wrapAll('<ul></ul>');
+		
+		// If they click on one of the live links, pause the video.
+		$('.linktext-live').on('click tap', function(){
+			state.videoPlayer.pause();
+		});
+		
+		linkTimer.sort(timeCompare);	// Uses a custom function to sort by time.
+										// I could have just done an array of times, but this will be more flexible later.
+		console.log(linkTimer);
+	
+	}
 
 	// Checks local storage and gets data from the video.
 	// Also sets up a few listeners.
@@ -217,6 +222,7 @@ $(document).ready(function(){
 			return 1;
 		return 0;
 	}
+	
 
 	// Converts hh:mm:ss to a number of seconds for time-based problems
 	function hmsToTime(hms){
