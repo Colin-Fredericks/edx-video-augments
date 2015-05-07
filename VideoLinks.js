@@ -66,6 +66,9 @@ $(document).ready(function(){
 			thisLink.attr('target', '_blank');
 			// Style all the links
 			thisLink.addClass('linktext-live');
+			
+			// Screen readers should skip these links. Rarely (but not never) an issue.
+			thisLinkBox.attr('aria-hidden','true');
 		
 			// Build the link timer from the divs.
 			linkTimer[index] = {};
