@@ -18,8 +18,16 @@ $(document).ready(function(){
 	
 	console.log('working');
 	
+	// We also need to make sure we can position things on the video.
+	// Let's base it off the position of the controls.
+	var vidlinks = $('#vidlinks-static').clone().prop('id', 'vidlinks-live')
+	vidlinks.appendTo('.video-controls');
+	$('.video-controls').addClass('link-positioner');
+	
+	
 	// Each link needs a little bit added to it, so we can simplify the author view.
-	$('#all-vidlinks').children().each(function(index){
+	// First, prep the links that we're going to display on the video.
+	$('#vidlinks-live').children().each(function(index){
 		
 		thisLinkBox = $(this);
 		thisLink = $(this).find('a');
@@ -34,23 +42,35 @@ $(document).ready(function(){
 		// Make all the links open in new pages.
 		thisLink.attr('target', '_blank');
 		// Style all the links
-		thisLink.addClass('linktext');
+		thisLink.addClass('linktext-live');
 		
-		// Build the link timer from the divs in the page.
+		// Build the link timer from the divs.
 		linkTimer[index] = {};
 		linkTimer[index].time = hmsToTime(thisLinkBox.attr('data-time'));
 		linkTimer[index].shown = false;
 	});
 	
+	// Now, prep the ones that go in as text
+	$('#vidlinks-static').children().each(function(index){
+		
+		thisLinkBox = $(this);
+		thisLink = $(this).find('a');
+		
+		// Give the link a class and a unique ID
+		thisLinkBox.addClass('vidlink-static');
+		thisLinkBox.attr('id','linkdetailstatic' + index);
+		
+		// Remove the images.
+		thisLink.find('img').remove();
+		
+	});
 	
-	// We also need to make sure we can position things on the video.
-	// Let's base it off the position of the controls.
-	$('#all-vidlinks').detach().appendTo('.video-controls');
-	$('.video-controls').addClass('link-positioner');
+	// Finish making the unordered list.
+	$('.vidlink-static').wrapAll('<ul></ul>');
 	
 	
-	// If they click on one of the links, pause the video.
-	$('.linktext').on('click tap', function(){
+	// If they click on one of the live links, pause the video.
+	$('.linktext-live').on('click tap', function(){
 		state.videoPlayer.pause();
 	});
 	
@@ -58,19 +78,6 @@ $(document).ready(function(){
 									// I could have just done an array of times, but this will be more flexible later.
 	console.log(linkTimer);
 	
-
-
-	// Log play/pause events from the player.
-	video.on('pause', function () {
-		Logger.log("harvardx.video_links", {"video_event": "pause"});
-		console.log('pause');
-	});
-
-	video.on('play', function () {
-		Logger.log("harvardx.video_links", {"video_event": "play"});
-		console.log('play');
-	});
-
 
 	// Check to see whether the video is ready before continuing.
 	var waitForVid = setInterval(function(){
@@ -90,7 +97,7 @@ $(document).ready(function(){
 		}
 	}, 100);
 	
-	
+
 	// Checks local storage and gets data from the video.
 	// Also sets up a few listeners.
 	function setUpData(){
@@ -153,17 +160,20 @@ $(document).ready(function(){
 	
 	}
 	
-
+	// Show the link on the video. While we're at it, bold the one in the list too.
 	function showLink(n){
 		console.log('showing link ' + n);
 		$('#linkdetail' + n ).show(linkOptions.effect, linkOptions.show, linkOptions.speed);
+		$('#linkdetailstatic' + n ).children().addClass('boldlink');
 		linkTimer[n].shown = true;
 		linkBeingShown = true;
 	}
 	
+	// Hide the link on the video and un-bold the one on the list.
 	function hideLink(n){
 		console.log('hiding link ' + n);
 		$('#linkdetail' + n ).hide(linkOptions.effect, linkOptions.show, linkOptions.speed);
+		$('#linkdetailstatic' + n ).children().removeClass('boldlink');
 		linkTimer[n].shown = false;
 		linkBeingShown = false;
 	}
@@ -199,13 +209,6 @@ $(document).ready(function(){
 	}
 
 
-	// I blame multiple Javascript timing issues.
-	function ISaidGoTo(thisTime){
-		console.log('I said go to ' + thisTime);
-		time = Math.max(+thisTime, 0);  // Using + to cast as number.
-		state.videoPlayer.seekTo(time);
-	}
-	
 	// This is a sorting function for my timer.
 	function timeCompare(a,b){
 		if (a.time < b.time)

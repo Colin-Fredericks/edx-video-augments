@@ -3,7 +3,7 @@ Video Links and Augments for edX
 
 There are two scripts in here.
 
-One (VideoLinks.js) pops up links on your edX video. It's a little like the cards that appear on YouTube videos, but you can link wherever you want with them. This is NOT accessible for visually-impaired users or keyboard users, so you should still have a list of these links elsewhere on your page.
+One (VideoLinks.js) pops up links on your edX video. It's a little like the cards that appear on YouTube videos, but you can link wherever you want with them. The list of links also shows up normally on the page.
 
 The other (VideoAugment.js) will make a set of little doodads underneath your video on edX. You can click on them to move the video or get more detail. I'm still working on it; this is a preliminary draft at the moment.
 
@@ -53,7 +53,6 @@ To Do list
 
 * Add click-for-popup and click-for-link functionality
 * Add Aria attributes (and do other stuff) to Augments for accessibility
-* Allow the links to appear in their regular place on the page, as well as on the video, so that people don't have to create a duplicate of the list.
 * lots more
 
 Wish List
