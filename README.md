@@ -15,7 +15,7 @@ How Do I Implement This?
 
 **The Links part:**
 
-Upload the VideoLinks.css and VideoLinks.js files to your Files & Uploads section (or, if you use the old XML interface, put them in your "static" directory).
+Upload the VideoLinks.css and VideoLinks.js files to your Files & Uploads section (or, if you use the old XML interface, put them in your "static" directory). Assuming that you're not HarvardX, you should probably replace hx_tiny\_white.png with your own image and put that in Files & Uploads as well. Use an image about 25 pixels tall.
 
 Copy-and-paste the VideoLinks.html file into a Raw HTML component somewhere on the page. I recommend directly underneath your video, but it should work anywhere.
 
