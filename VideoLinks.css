@@ -4,6 +4,9 @@
 #vidlinks-live {	
 }
 
+.link-text-live {
+}
+
 .vidlink {
 	display: none;
 	opacity: 0.7;
@@ -21,12 +24,10 @@
 	
 	border-radius: 4px;
 	box-shadow: 2px 2px 4px #111;
-	
-
 }
 
 .vidlink-static {
-	display: list-item
+	display: list-item;
 }
 
 .vidlink a:link {
@@ -39,9 +40,6 @@
 
 .link-positioner {
 	position: relative;
-}
-
-.linktext-live {
 }
 
 .boldlink {
