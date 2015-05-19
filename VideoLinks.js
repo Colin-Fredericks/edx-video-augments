@@ -12,24 +12,32 @@ $(document).ready(function(){
 	var time;
 	var linkTimer = [];
 	var linkBeingShown = [];
-	var hideLinkAfter = 5;  // Seconds
 	
-	var linkOptions = {
-		'effect': 'slide',
-		'hide': {'direction':'down'},
-		'show': {'direction':'down'},
-		'speed': 500
+	// hideLinkAfter and linkOptions can be defined on the HTML page. Set defaults below.
+	
+	if (typeof hideLinkAfter == 'undefined'){
+		var hideLinkAfter = 5;  // Seconds
+	}
+	
+	if (typeof linkOptions == 'undefined'){
+		var linkOptions = {
+			'effect': 'slide',
+			'hide': {'direction':'down'},
+			'show': {'direction':'down'},
+			'speed': 500
+		};
 	}
 	
 	console.log('working');
 
 
 	// Mark each video and set of controls with a class that will let us
-	// handle each of them separately.
+	//  handle each of them separately.
 	// Numbering from 1 to make things easier for course creators.
 	video.each(function(index){   $(this).addClass('for-video-' + (index + 1));   });
 	vidControls.each(function(index){   $(this).addClass('for-video-' + (index + 1));   });
 	
+	// We're positioning links based on the video controls.
 	vidControls.addClass('link-positioner');
 	
 	video.each(function(vidnumber){
@@ -45,7 +53,6 @@ $(document).ready(function(){
 			if(typeof state.videoPlayer != 'undefined'){
 				if (state.videoPlayer.isCued()){
 					console.log('video data loaded');
-					setUpData(state, vidnumber);
 					mainLoop(state, vidnumber);
 					clearInterval(waitForVid);
 				}
@@ -54,7 +61,7 @@ $(document).ready(function(){
 	
 	});
 	
-
+	// Take the simple list in our HTML and make it FABULOUS
 	function setUpLists(vidnumber){
 		
 		// Let's copy the links to the video controls so we can position them there.
@@ -62,11 +69,11 @@ $(document).ready(function(){
 			.clone()
 			.prop('id', 'vidlinks-live-' + (vidnumber+1));
 		vidlinks.appendTo('.video-controls.for-video-' + (vidnumber+1));
-
+		
 		linkTimer[vidnumber] = [];
-					
-		// Each link needs a little bit added to it, so we can simplify the author view.
-		// First, prep the links that we're going to display on the video.
+		
+		// Each link needs a little bit added to it, to keep the author view simple.
+		// This preps the links that we're going to display on the video.
 		$('#vidlinks-live-' + (vidnumber+1)).children().each(function(index){
 			
 			var thisLinkBox = $(this);
@@ -95,7 +102,7 @@ $(document).ready(function(){
 			linkTimer[vidnumber].push(tempTimer);
 		});
 	
-		// Now, prep the ones that go in as text
+		// This preps the ones that are visible all the time.
 		$('#vidlinks-static-' + (vidnumber+1)).children().each(function(index){
 		
 			var thisLinkBox = $(this);
@@ -123,25 +130,6 @@ $(document).ready(function(){
 
 		console.log(linkTimer[vidnumber]);
 	
-	}
-
-	// Checks local storage and gets data from the video.
-	// Also sets up a few listeners.
-	function setUpData(state, vidnumber){
-	
-		console.log('setting up data');
-	
-		// Get the video data.
-		video =  $('.video');
-		var state = video.data('video-player-state');
-		time = state.videoPlayer.currentTime;
-				
-		// If the first link has zero or negative time, make it visible right away.
-		var firstTime = $('#link-card-live-0').attr('data-time')
-		if(firstTime <= 0){
-			showLink(0, vidnumber);
-		}
-
 	}
 	
 	// Every 500 ms, check to see whether we're going to show a new link.
@@ -212,7 +200,7 @@ $(document).ready(function(){
 	}
 	
 	
-	// Which link should we be showing right now? Return -1 if none.
+	// Which link SHOULD we be showing right now? Return -1 if none.
 	function currentLink(t, vidnumber){
 		
 		var linkNumber = -1;
@@ -227,7 +215,7 @@ $(document).ready(function(){
 	}
 
 
-	// Which link are we actually showing right now? Return -1 if none.
+	// Which link are we ACTUALLY showing right now? Return -1 if none.
 	function currentLinkShown(vidnumber){
 		
 		var linkNumber = -1;
@@ -252,7 +240,8 @@ $(document).ready(function(){
 	}
 	
 
-	// Converts hh:mm:ss to a number of seconds for time-based problems
+	// Converts hh:mm:ss to a number of seconds for time-based problems.
+	// If it's passed a number, it just spits that back out as seconds.
 	function hmsToTime(hms){
 
 		hms = hms.toString();
