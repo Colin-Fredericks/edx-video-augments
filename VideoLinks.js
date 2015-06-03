@@ -201,6 +201,7 @@ $(document).ready(function(){
 	
 	
 	// Which link SHOULD we be showing right now? Return -1 if none.
+	// If we should be showing several, returns the first one.
 	function currentLink(t, vidnumber){
 		
 		var linkNumber = -1;
@@ -216,6 +217,7 @@ $(document).ready(function(){
 
 
 	// Which link are we ACTUALLY showing right now? Return -1 if none.
+	// If we're showing several, returns the first one.
 	function currentLinkShown(vidnumber){
 		
 		var linkNumber = -1;
