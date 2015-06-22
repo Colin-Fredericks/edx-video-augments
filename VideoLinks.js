@@ -53,6 +53,7 @@ $(document).ready(function(){
 			if(typeof state.videoPlayer != 'undefined'){
 				if (state.videoPlayer.isCued()){
 					console.log('video data loaded');
+					setUpListeners(state);
 					mainLoop(state, vidnumber);
 					clearInterval(waitForVid);
 				}
@@ -121,17 +122,24 @@ $(document).ready(function(){
 		// Finish making the unordered list.
 		$('#vidlinks-static-' + (vidnumber+1) + ' .vidlink-static').wrapAll('<ul></ul>');
 		
-		// If they click on one of the live links, pause the video.
-		$('.link-text-live').on('click tap', function(){
-			state.videoPlayer.pause();
-		});
-		
 		linkTimer[vidnumber].sort(timeCompare);	// Uses a custom function to sort by time.
 
 		console.log(linkTimer[vidnumber]);
 	
 	}
 	
+	
+	// Set up listeners for the live links.
+	function setUpListeners(state){
+	
+		// If they click on one of the live links, pause the video.
+		$('.link-text-live').on('click tap', function(){
+			state.videoPlayer.pause();
+		});
+	
+	}
+	
+
 	// Every 500 ms, check to see whether we're going to show a new link.
 	function mainLoop(state, vidnumber){
 		
