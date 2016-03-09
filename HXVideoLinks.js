@@ -9,6 +9,12 @@ var HXVideoLinks = (function() {
     
     // hideLinkAfter and hxLinkOptions can be defined on the HTML page. Set defaults below.
     
+    if (typeof hxLinkOptions === 'undefined'){
+        var hxLinkOptions = setLinkOptions();
+    } else{
+        hxLinkOptions = checkLinkOptions(hxLinkOptions);
+    }
+
     if (typeof hideLinkAfter == 'undefined'){
         var hideLinkAfter = 5;  // Seconds
     }
@@ -31,20 +37,15 @@ var HXVideoLinks = (function() {
         var waitForVid = setInterval(function(){
             
             try {
-                var state = thisVid.data('video-player-state');
+                var state = thisVid.data('video-player-state'); // Sometimes this fails and that's ok.
 
                 if(typeof state.videoPlayer !== 'undefined'){
                     if (state.videoPlayer.isCued()){
                         console.log('video data loaded');
-                        if (typeof linkOptions == 'undefined'){
-                            linkOptions = setLinkOptions();
-                        }
-                        else{
-                            linkOptions = checkLinkOptions(linkOptions);
-                        }
+
                         // We're positioning links based on the video.
                         vidWrappers.addClass('link-positioner');
-    
+
                         setUpListeners(state);
                         mainLoop(state, vidnumber);
                         clearInterval(waitForVid);
@@ -53,10 +54,11 @@ var HXVideoLinks = (function() {
 
             }
             catch(err){
-                console.log('waiting for video to be ready');
+                console.log('waiting for video ' + vidnumber+1 + ' to be ready');
             }
+
             
-        }, 100);
+        }, 200);
     
     });
     
