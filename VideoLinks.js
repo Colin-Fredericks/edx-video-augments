@@ -19,7 +19,7 @@ $(document).ready(function(){
         var hideLinkAfter = 5;  // Seconds
     }
     
-    console.log('working');
+    console.log('VideoLinks.js working');
 
 
     // Mark each video and set of controls with a class that will let us
@@ -35,26 +35,33 @@ $(document).ready(function(){
     
         // Check to see whether the video is ready before continuing.
         var waitForVid = setInterval(function(){
-
-            var state = thisVid.data('video-player-state');    // Sometimes this fails and that's ok.
             
-            if(typeof state.videoPlayer != 'undefined'){
-                if (state.videoPlayer.isCued()){
-                    console.log('video data loaded');
-                    if (typeof linkOptions == 'undefined'){
-                        linkOptions = setLinkOptions();
-                    }
-                    else{
-                        linkOptions = checkLinkOptions(linkOptions);
-                    }
-                    // We're positioning links based on the video.
-                    vidWrappers.addClass('link-positioner');
+            try {
+                var state = thisVid.data('video-player-state');
+
+                if(typeof state.videoPlayer !== 'undefined'){
+                    if (state.videoPlayer.isCued()){
+                        console.log('video data loaded');
+                        if (typeof linkOptions == 'undefined'){
+                            linkOptions = setLinkOptions();
+                        }
+                        else{
+                            linkOptions = checkLinkOptions(linkOptions);
+                        }
+                        // We're positioning links based on the video.
+                        vidWrappers.addClass('link-positioner');
     
-                    setUpListeners(state);
-                    mainLoop(state, vidnumber);
-                    clearInterval(waitForVid);
+                        setUpListeners(state);
+                        mainLoop(state, vidnumber);
+                        clearInterval(waitForVid);
+                    }
                 }
+
             }
+            catch(err){
+                console.log('waiting for video to be ready');
+            }
+            
         }, 100);
     
     });
