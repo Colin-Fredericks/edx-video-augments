@@ -54,7 +54,7 @@ var HXVideoLinks = (function() {
 
             }
             catch(err){
-                console.log('waiting for video ' + vidnumber+1 + ' to be ready');
+                console.log('waiting for video ' + (vidnumber+1) + ' to be ready');
             }
 
             
@@ -221,7 +221,7 @@ var HXVideoLinks = (function() {
     
     // Show the link on the video. While we're at it, bold the one in the list too.
     function showLink(n, vidnumber){
-        console.log('showing link ' + n + ' for video ' + (vidnumber+1));
+        console.log('showing link ' + (n+1) + ' for video ' + (vidnumber+1));
         $('#hx-vidlinks-live-' + (vidnumber+1) +' #link-card-live-' + n )
             .show(hxLinkOptions.effect, hxLinkOptions.show, hxLinkOptions.speed);
         $('#hx-vidlinks-static-' + (vidnumber+1) +' #link-card-static-' + n )
@@ -233,7 +233,7 @@ var HXVideoLinks = (function() {
     
     // Hide the link on the video and un-bold the one on the list.
     function hideLink(n, vidnumber){
-        console.log('hiding link ' + n + ' for video ' + (vidnumber+1));
+        console.log('hiding link ' + (n+1) + ' for video ' + (vidnumber+1));
         $('#hx-vidlinks-live-' + (vidnumber+1) +' #link-card-live-' + n )
             .hide(hxLinkOptions.effect, hxLinkOptions.show, hxLinkOptions.speed);
         $('#hx-vidlinks-static-' + (vidnumber+1) +' #link-card-static-' + n )
