@@ -1,6 +1,10 @@
 Video Links and Augments for edX
 ====================
 
+**Warning:** This code has been folded into and superceded by [HX-JS](https://github.com/Colin-Fredericks/hx-js), which is a much better source for your video-meddling needs. You should go there instead.
+
+------
+
 There are two scripts in here.
 
 One (VideoLinks.js) pops up links on your edX video. It's a little like the cards that appear on YouTube videos, but you can link wherever you want with them. The list of links also shows up normally on the page. You can even have multiple videos, each with its own separate set of links.
